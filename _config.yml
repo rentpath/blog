@@ -20,4 +20,7 @@ github_username:  jekyll
 # Build settings
 markdown: kramdown
 
-exclude: [bin, vendor]
+exclude:
+  - bin
+  - tmp
+  - vendor
