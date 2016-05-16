@@ -131,10 +131,11 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  github-pages
+  github-pages (= 78)
   html-proofer
   jekyll
   jekyll-feed
+  json
 
 BUNDLED WITH
    1.11.2

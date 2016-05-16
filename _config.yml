@@ -21,6 +21,8 @@ gems:
 
 github_username:  rentpath
 
+timezone: America/New_York
+
 title: The RentPath Development and DevOps blog
 
 twitter_username: rentpathdevs
@@ -35,5 +37,8 @@ exclude:
   - bin
   - tmp
   - vendor
+
+kramdown:
+  input: GFM
 
 markdown: kramdown
