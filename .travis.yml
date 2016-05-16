@@ -1,7 +1,31 @@
-language: ruby
+after_deploy:
 
-script: ./bin/build
+after_script:
+
+before_deploy:
+
+before_script:
+
+deploy:
+  access_key_id: AKIAJK7IBXBL4DQEEPWA
+  acl: public_read
+  bucket: rentpath-blog
+  local-dir: _site
+  on:
+    repo: rentpath/blog
+    branch: gh-pages
+  provider: s3
+  secret_access_key:
+    secure: CbzPBdnDIJFC16uE4iRrJ/SGLn4sm+h+4HrmStjVM0k5l9qiSZt1tKeya5eiRCuHGtL4qL3uPkpVy38//qBQQ+4bwfJwWvGdhbCA4K36al1MQx5IBkCpRi6zHGNIX6paU76l1Btm/gl+9tSj7qv9Po1wrqVdakY7dtu/KyFFdGNy+JC5sjjECBrNkBA7nEDZuOR60BZ8uRbvSWBVnjl69KgrCdP1Dvr6z+/RZTxUEdgDcDxnwqTEateJiT5O4nUwwG39iFyS6qhKNWr0DdMoi2n1FhYGiCrolXDxkA9ufbklIxAl8h3MHhQzYdPf+UPcDMX56limwesxNBRM5cYeDC3panYPHQDj8ExZQHhKy/msIlekOPJ+GWjt3wCEZGLXbjqcg/vjm3RDME/Q14cmG5U/rbPtbO/gXcnZCrv8I2OQIVnP2LWCOjLLj20IC2IncqT3fYsPbJqM47ldTps5S46GKdj39X1dQC7B+khqKuTWZ5HiVV/JFBHZGJMjxdEdslqE1rFu/rQnkin5aHATZvnOatgZmABoZok7rwisnNKqs3v4Umdg4ZRCE9XF5W5l1ZjjSF0YA50RNq2q1/9ZLVpPk20gUOI2J+Q0pcEuuTAFi1WxFFsLBC+4UPiaLwYHcREyf4Hq7lPu5zIMa1JonE2S+uqdFHmgSaFbBSQ1gZs=
+  skip_cleanup: true
 
 env:
   global:
-  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true # speeds up installation of html-proofer
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+
+install:
+  bundle install
+
+language: ruby
+
+script: './bin/build'

@@ -5,7 +5,7 @@
 
 #
 # Site settings
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: '' # the subpath of your site, e.g. /blog
 
 description: > # this means to ignore newlines until the next tag
   Learn practical and advanced techniques in software development and
@@ -27,8 +27,7 @@ title: The RentPath Development and DevOps blog
 
 twitter_username: rentpathdevs
 
-url: "http://yourdomain.com" # the base hostname & protocol for your site
-
+url: 'http://blog.rentpath.com' # the base hostname & protocol for your site
 
 #
 # Build settings
