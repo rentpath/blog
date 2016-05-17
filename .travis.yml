@@ -1,18 +1,21 @@
-language: ruby
 env:
   global:
-  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+
 install: bundle install
+
+language: ruby
+
 script: "./bin/build"
+
 deploy:
-  provider: s3
   access_key_id: AKIAJQLZ2C6R36UDTCIA
-  secret_access_key:
-    secure: S2XyKhtvsN6JleKZ2dM7CPeR/CiOiAXjA514LWK0E/xSTOE6K9Tz9o+VT6Nxb9i1HazfZYcW1MbQbWkxVxCVy4dnDJAqNaohB/Mq46y0sa6CBQcmBTlR17xTzYDe9wREqRxBDiwJFRfCPIrWgBsilSDikusQd0mKSpme/Vx34D4OVDFiIpk7M8/lMxPBw3wPwXrTj2b1WygHseMcO84j1XXKw6Zoy80U5XaCqHwkJF/1kHFBz7e6AwouW5HxwZcJw7lrq1lY0wI+62VvVQG5NJHE/HbnE20h+oH3ZJcYu9zAuG4vGFR/G2Ys+0WI6tEJK8WjRJ5oiCmiL5twX2erQM7dXQi1cHydETfQ6CzMEuHBK+xY8BCtOEDC5qObIJz4nD2P2+13aJMznhSq3jGpk3NFELeAJqOCDqXMAfr6OWAVxXgWB20v0GKvZmgw9ptno9rE3PIpm/YprDIUSqyj9pfFIBCJpDYiXUr0kq41iX3rZNecd52+q2nHdS3trSCWSbc5C9o9CG6dBv9hRX8ggEx16syM+ns8XpSlSlBRPWwwWLM18O1/Y9keAdONJzQs4E0o4hDx3IVw2CaZAvTImraUPGhZ+rQiy44x+y+WdeLwf/wDs5VqoJofTMDvGNpst8sveYUxxS1672WlcMBV47Uu6BwQXHi3JVasEX43hCk=
-  bucket: idg-blog
   acl: public_read
+  bucket: idg-blog
   local_dir: _site
   on:
-    repo: rentpath/blog
     branch: master
-
+    repo: rentpath/blog
+  provider: s3
+  secret_access_key:
+    secure: S2XyKhtvsN6JleKZ2dM7CPeR/CiOiAXjA514LWK0E/xSTOE6K9Tz9o+VT6Nxb9i1HazfZYcW1MbQbWkxVxCVy4dnDJAqNaohB/Mq46y0sa6CBQcmBTlR17xTzYDe9wREqRxBDiwJFRfCPIrWgBsilSDikusQd0mKSpme/Vx34D4OVDFiIpk7M8/lMxPBw3wPwXrTj2b1WygHseMcO84j1XXKw6Zoy80U5XaCqHwkJF/1kHFBz7e6AwouW5HxwZcJw7lrq1lY0wI+62VvVQG5NJHE/HbnE20h+oH3ZJcYu9zAuG4vGFR/G2Ys+0WI6tEJK8WjRJ5oiCmiL5twX2erQM7dXQi1cHydETfQ6CzMEuHBK+xY8BCtOEDC5qObIJz4nD2P2+13aJMznhSq3jGpk3NFELeAJqOCDqXMAfr6OWAVxXgWB20v0GKvZmgw9ptno9rE3PIpm/YprDIUSqyj9pfFIBCJpDYiXUr0kq41iX3rZNecd52+q2nHdS3trSCWSbc5C9o9CG6dBv9hRX8ggEx16syM+ns8XpSlSlBRPWwwWLM18O1/Y9keAdONJzQs4E0o4hDx3IVw2CaZAvTImraUPGhZ+rQiy44x+y+WdeLwf/wDs5VqoJofTMDvGNpst8sveYUxxS1672WlcMBV47Uu6BwQXHi3JVasEX43hCk=
