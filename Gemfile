@@ -9,5 +9,5 @@ gem 'github-pages', versions['github-pages']
 gem 'html-proofer'
 gem 'jekyll'
 gem 'jekyll-feed'
+gem 's3_website'
 gem 'travis'
-
