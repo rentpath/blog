@@ -1,0 +1,14 @@
+Welcome to the Rentpath Engineering Blog.
+
+Amid all the emerging technologies and new fields in the last 10 years (let alone 30) - there are challenges in how to harness a team to achieve great things.
+
+The biggest challenges are not the tech stack, or building the best UX, or creating the best product feature in a crowded space, but they are how to keep a great group of people engaged, excited and motivated to work on a code base for several years.  We don’t trade on our secret labs, we don’t do things no one else is doing, we don’t see our work in the newspaper, we don’t have famous figures leading teams - we just do things better and more effectively than other people - and of course we love technology - all of it - in all its forms.  We constantly try to use it to do new things.  So much of the software engineering these days is in fields that are behind the services you take for granted, all those mundane things like paying bills, finding information, reading a blog, looking for a house.  Each of those has a team that is building things, and grappling with the same issues we do.  Infrastructure, data, silly protocols, restful APIs - and are constantly trying to build something at the same time.  We are no different.
+
+We have two goals this year - moving from good to great in everything we do, and framing ourselves to build the best consumer and customer experience possible.  Moving from good to great means being self reflective, asking questions, making changes, trying new things and of course breaking lots of things.  We are off to a good start!  We are on the journey - and we want to share, hence this blog.  From full front end stack changes, to solving performance issues, to crashing infrastructure systems, to data persistency, we work across it all.  
+
+I hope you enjoy this blog, it will cover some of the softer aspects of coding, and the hard edged technical things we do - and it will cover all sorts of stuff in between.
+
+We love feedback - please feel free to share with us.
+
+Stuart Hume 
+
