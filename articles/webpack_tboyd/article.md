@@ -1,8 +1,25 @@
-# Why Webpack is worth looking at
+# Webpack: A Tool for the Age
 
-Mastering Webpack (or a tool like it) will be indispensable for developing web apps in the new mobile-first world order. It places unprecedented power into the hands of developers to control asset delivery. Let’s begin by looking at how the industry has changed in the past 10 years.
+A modern web page is a complex and sizeable tangle of content and technology. Page size, as measured in kilobytes, has more than doubled in the recent past, while the number of page objects has steadily increased. Figure One shows both trends between 1995, the early days of the web, and 2014. 
 
-[[image1.png]]
+![Figure One: Complexity of a web page](image2.png)
+
+If you&rsquo;re a web developer, these metrics likely come as no surprise. Indeed, you may argue that &ldquo;web page&rdquo; is something of a misnomer. &ldquo;Application&rdquo; is an increasingly apt description of what&rsquo;s being delivered to so many browsers. A modern web page can include megabytes of *HTML*, *CSS*, and *JavaScript*. 
+
+
+
+ 
+
+ as more and more features are delivered over the wire. It is not uncommon 
+ 
+
+Web pages continue to supplant most forms of computing, including the desktop, having reached parity in features and interactivity. Indeed, it's something of a misnomer to call a Yet ironically, 
+
+Webpack is indispensable for developing modern, responsive, and full-featured web pages. It places unprecedented power into the hands of developers to control asset delivery. 
+
+Let’s begin by looking at how the industry has changed in the past 10 years.
+
+![Mobile usage](image1.png)
 
 **1. Mobile internet consumption as a proportion of total traffic has nearly doubled in the past 3 years.**
 
@@ -12,7 +29,6 @@ I believe that this is mostly due to the fact that Android device manufacturers 
 
 But another thing has been happening:
 
-[[image2.png]]
 
 **2. Client-side functionality has increased 10x in the past 10 years.**
 
