@@ -1,4 +1,4 @@
-# Webpack: A Tool for the Modern Age
+# Webpack: Diamond in the Rough
 
 A modern web page is a sizeable and complex tangle of content and technology. As evidence, page size (measured in kilobytes) has more than doubled in the recent past, while the number of page objects has steadily increased. The chart below shows both trends between the early days of the web and 2014.
 
@@ -67,51 +67,51 @@ If you&rsquo;re a web developer, these metrics likely come as no surprise. Indee
 
 Ten years ago, the web was simple to create for, albeit offering limited interactivity. There was a handful of browsers. In contrast, web development today is very complex. Browser-based computing continues to supplant most other forms of computing, including the desktop, having reached parity in features and interactivity. Further, the number of clients consuming the web is inordinate, including many browsers and a host of mobile clients that did not exist a decade ago.
 
-The chart below tracks the poularity of the top eight desktop, mobile, and tablet operating systems during the past three years.  
+The chart below tracks the popularity of the top eight desktop, mobile, and tablet operating systems on the web during the past three years. Notice how much the total share of page views coming from mobile has increased in such a short amount of time.
 
 ![Figure Two: The Top 8 operating systems](image1.png)
 
 It is remarkable that a site can behave well both on a low-resolution smart phone and on a high-resolution monitor. Remarkable for the user, yes. Fun for the developer? Hardly.
 
-[Ed.: There likely needs to be a bridge here between this notion and Webpack. What are the problems that Webpack solves? Can those problems be tied to what was just said?]
-
-*Webpack* is indispensable for developing modern, responsive, and full-featured web pages. It gives you unprecedented power to control asset delivery.
-
+Web developers are now in a catch-22. On the one hand, we are expected to deliver a fully rich and interactive UI, but on the other hand, we also need to cater to a range of slower, dumber devices. The key to solving this problem lies in smart asset packaging.
 
 ## Enter Webpack
 
-[Ed: Is there a brief explanation of what it does and how it works that could be inserted here?]
+The problem here is that front-end assets lack a uniform system for composition and distribution. How do you orchestrate a symphony of JS, CoffeeScript, ES6, CSS, SCSS, SVG, HTML4, HTML5, and JSON?
 
-Webpack, like *Ruby*, *Git*, and *Linux*, adheres to a universal abstraction: everything is a *module*. No matter what type of asset you&rsquo;re must bundle, you can require it directly into your Javascript using whatever method you like.
+Before Webpack, this was managed in a variety of different ways. You had an assortment of HTML techniques, such as script tags, async script tags, link tags, and various methods of inlining. You also had Javascript APIs, such as dynamic script tags, third-party abstractions like `$.getScript()`, you had JSONP, and `eval`. You also had a world of preprocessors to turn developer-friendly languages like CoffeeScript and SCSS into their browser-compliant counterparts.
 
-[Ed.: What is the workflow like without Webpack? What are the differences between CommonJS and AMD? Spell out what AMD stands for. Would it be helpful to show an example with real collection of assets?]
+Webpack takes a unified approach to all of this. Like *Ruby*, *Git*, and *Linux*, it adheres to a universal abstraction: everything is a *module*. No matter what type of asset you&rsquo;re must bundle, you can require it directly into your front-end code as if it were a Javascript module.
 
-CommonJS:
+This allows Webpack to automate some of the complexity of this task, as we'll see later on in the article.
+
+## How to load assets in Webpack
+
+As of 2014, there were two main styles for importing Javascript modules: CommonJS and AMD. Webpack incorporates these two styles, as shown below:
 
 ```javascript
+// CommonJS:
 require.ensure([“icon.png”, “stylesheet.css”], function(require) {
 	var icon = require(“icon.png”);
 	var stylesheet = require(“stylesheet.css”);
 	…
 });
-```
 
-AMD:
-
-```javascript
+// AMD:
 define([“icon.png”, “stylesheet.css”], function(icon, stylesheet) {
 	…
 });
 ```
 
-`define` and `require.ensure` are the signals [Ed.: Is `signals` the best word to use here?] Webpack uses to draw its internal dependency tree for your system of asset files. This tree can be arbitrarily complex, and produces fruits called chunks.
+`define` and `require.ensure` are used by Webpack to draw its internal dependency tree for your system of asset files. This tree can be arbitrarily complex, and produces fruits called chunks.
 
 A chunk is a bundle of Javascript that contains a set of asset files. If you run Webpack with `--display-chunks`, you will see Webpack concatenate all of your assets into a single chunk by default. This is how most people have managed large Javascript projects in the past. But ever since mobile devices have taken over the internet, that behavior is no longer optimal. That’s where split points come in.
 
 Your split points are the points in your code where Webpack encounters a define or require.ensure. These are places where Webpack knows it can separate a piece of code into separate chunks. The genius of Webpack is that split points don’t necessarily follow file boundaries, but are entirely up to the developer; one file can have a single split point at the top, or it can have several. The result is greater flexibility in loading your assets. You can have sections of your code block the rendering of the page, while other sections load concurrently in the background. Again, this is crucial in 2016 when you have to support a range of devices with unpredictable connectivity.
 
-[Ed.: A diagram showing the Webpack worflow and input and output could be helpful. The diagram might show all of the possible transformations supported, such as changing SCSS to CSS, etc.]
+If you were to try to do this manually using the full range of static and dynamic techniques for progressive enhancement, you would end up with a mess. Webpack automates this process and gives it a predictable structure, illustrated below:
 
+![Chunking client-side code, with and without Webpack](WebpackWithWithout.svg)
 
 ## Using complexity to simplify something even more complex
 
@@ -131,9 +131,9 @@ In short, you have a component, shown only after a user action, that is dependen
 
 In the past, you might solve this problem with dynamic loading techniques like passing callbacks, dynamically creating script tags, keeping track of state through booleans scattered throughout your code, and so on. You might end up with a sloppy state machine scattered across about 5 files that is still slow and vulnerable to race conditions.
 
-[Ed.: Does this problem statement belong further up to help motivate why Webpack is a better solution? Once you explain the problem and how bad the normal solution is, why does Webpack address it?]
+By virtue of its **universal abstraction** of modules, Webpack handles this part for you. All you have to do is specify which sections of code depend on which assets, using split points.
 
-Here’s an optimal solution using Webpack:
+Here’s one optimal solution to the problem above:
 
 ```javascript
 define([
@@ -169,7 +169,6 @@ Looks like regular Javascript written in the AMD style, right? It is, but Webpac
 
 But this doesn’t mean you have to write in AMD or limited to libraries written in AMD. Webpack also supports CommonJS-style modules, as well as modules that interact with globally scoped objects like `window`. Webpack even supports modules that use AMD or CommonJS incorrectly. You can mix and match all of these types of libraries in one code base, while writing your app code the way you prefer.
 
-
 ## Set your publicPath
 
 There is one slight caveat with this technique, and that comes into play when you are using a CDN to deliver your assets.
@@ -178,15 +177,13 @@ When using Webpack’s dynamic require as shown above, Webpack will automaticall
 
 This only becomes a concern once you use a dynamic require, so not every Webpack configuration will have the publicPath specified. Whenever you use this technique, you should be sure to check to make sure the publicPath is properly set.
 
-
 ## Conclusion
 
-[Ed.: When should a developer use Webpack? When to avoid it? Any evidence of time saved with it? ]
+Asset delivery is not an area most front-end developers focus on. This is because, with the set of ad-hoc techniques we're accustomed to, creating a progressively enhanced client-side app is far more trouble than it's worth. Webpack simplifies this to the extent that any dev can now exercise full control over when and where their code gets loaded.
 
-I don’t know enough about Webpack yet to guarantee that it won’t be made obsolete by some other tool within the next couple of years. But, I do know enough to say that mastering a tool like Webpack will pay off many times in the long run if you are heavily invested in developing for the web platform. Even if Webpack stays in the margins of the Javascript community, its innovative principles will guide the design of its own future usurpers.
+I don’t know enough about Webpack yet to guarantee that it won’t be made obsolete by some other tool within the next couple of years. But, I do know enough to say that mastering a tool like Webpack will pay off many times in the long run if you are heavily invested in developing for the web platform.
 
 Like Rails in 2009, Webpack is a mature technology outside the mainstream that has nonetheless attracted a community of highly productive people and created its own niche. I’m excited to learn Webpack and look forward to see what comes of it.
-
 
 ## References
 
@@ -196,5 +193,3 @@ Like Rails in 2009, Webpack is a mature technology outside the mainstream that h
 * https://github.com/webpack/docs/wiki/shimming-modules
 
 <script data-codementor="tylerboyd" data-style="badge" data-theme="light" src="https://cdn.codementor.io/assets/badge.js"></script>
-
-[Ed.: What are the alternatives to Webpack? Why would you use one of those and not the othr?]
