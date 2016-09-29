@@ -1,7 +1,7 @@
 # Webpack: Diamond in the Rough
 
 Approaching "modern" front-end development in 2016 is a daunting task, even for experienced developers. I have found one technology in my journey that simplifies things enough to belong in everyone's toolkit. That technology is Webpack.
-`
+
 To understand why Webpack is so valuable, we must first understand how the industry has changed over the past ten years.
 
 ![Figure One: The increasing complexity of a web page](image2.png)
