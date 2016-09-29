@@ -111,7 +111,7 @@ Your split points are the points in your code where Webpack encounters a define 
 
 If you were to try to do this manually using the full range of static and dynamic techniques for progressive enhancement, you would end up with a mess. Webpack automates this process and gives it a predictable structure, illustrated below:
 
-![Chunking client-side code, with and without Webpack](WebpackWithWithout.svg)
+![Chunking client-side code, with and without Webpack](WebpackWithWithout.png)
 
 ## Using complexity to simplify something even more complex
 
