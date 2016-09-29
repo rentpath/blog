@@ -1,10 +1,20 @@
 # Webpack: Diamond in the Rough
 
-A modern web page is a sizeable and complex tangle of content and technology. As evidence, page size (measured in kilobytes) has more than doubled in the recent past, while the number of page objects has steadily increased. The chart below shows both trends between the early days of the web and 2014.
+Approaching "modern" front-end development in 2016 is a daunting task, even for experienced developers. I have found one technology in my journey that simplifies things enough to belong in everyone's toolkit. That technology is Webpack.
+`
+To understand why Webpack is so valuable, we must first understand how the industry has changed over the past ten years.
 
 ![Figure One: The increasing complexity of a web page](image2.png)
 
-If you&rsquo;re a web developer, these metrics likely come as no surprise. Indeed, you may argue that &ldquo;web page&rdquo; is something of a misnomer. Instead, &ldquo;Application&rdquo; is an increasingly apt description of what&rsquo;s delivered to so many browsers. A click can ultimately require megabytes of *HTML*, *CSS*, and *JavaScript*. Web developers face far greater challenges than even five years ago, as summarized in the next table.
+If you&rsquo;re a web developer, these metrics likely come as no surprise. The modern web is an arms race of client-side functionality. As more and more bells and whistles are required for the average web page, the client-side payload gets heavier and heavier, along with the number of objects held in memory. This clogs the network connection and wears down the CPU, and on smaller devices, it can render the website completely unusable.
+
+This is quite unfortunate when you consider another industry trend unfolding at the same time:
+
+![Figure Two: The Top 8 operating systems](image1.png)
+
+The chart above tracks the popularity of the top eight desktop, mobile, and tablet operating systems on the web during the past three years. Notice how much the total share of page views coming from mobile has increased in such a short amount of time.
+
+In 2006, few expected Javascript to become such an unstoppable force in the software world. In 2009, few expected the mobile ecosystem to emerge so triumphantly and rival desktop traffic. Yet, in 2016, this is where we are.
 
 <table class="c26">
     <tbody>
@@ -65,23 +75,17 @@ If you&rsquo;re a web developer, these metrics likely come as no surprise. Indee
     </tbody>
 </table>
 
-Ten years ago, the web was simple to create for, albeit offering limited interactivity. There was a handful of browsers. In contrast, web development today is very complex. Browser-based computing continues to supplant most other forms of computing, including the desktop, having reached parity in features and interactivity. Further, the number of clients consuming the web is inordinate, including many browsers and a host of mobile clients that did not exist a decade ago.
+Ten years ago, the web was simple to create for, albeit offering limited interactivity. There was a handful of browsers. In contrast, web development today is very complex. If a site behaves well both on a low-resolution smart phone and on a high-resolution monitor, while still providing a pleasant user experience, it's an engineering miracle at the cost of thousands of dev hours.
 
-The chart below tracks the popularity of the top eight desktop, mobile, and tablet operating systems on the web during the past three years. Notice how much the total share of page views coming from mobile has increased in such a short amount of time.
-
-![Figure Two: The Top 8 operating systems](image1.png)
-
-It is remarkable that a site can behave well both on a low-resolution smart phone and on a high-resolution monitor. Remarkable for the user, yes. Fun for the developer? Hardly.
-
-Web developers are now in a catch-22. On the one hand, we are expected to deliver a fully rich and interactive UI, but on the other hand, we also need to cater to a range of slower, dumber devices. The key to solving this problem lies in smart asset packaging.
+As web developers, we now find ourselves in a catch-22. On the one hand, we are expected to deliver a fully rich and interactive UI, but on the other hand, we also need to cater to a range of slower, dumber devices. The key to solving this problem lies in smart asset packaging.
 
 ## Enter Webpack
 
-The problem here is that front-end assets lack a uniform system for composition and distribution. How do you orchestrate a symphony of JS, CoffeeScript, ES6, CSS, SCSS, SVG, HTML4, HTML5, and JSON?
+There is a well-known solution to this problem by the name of progressive enhancement, in which the developer keeps the initial payload light, then gradually adds in those bells and whistles, according to what the client can handle.
 
 Before Webpack, this was managed in a variety of different ways. You had an assortment of HTML techniques, such as script tags, async script tags, link tags, and various methods of inlining. You also had Javascript APIs, such as dynamic script tags, third-party abstractions like `$.getScript()`, you had JSONP, and `eval`. You also had a world of preprocessors to turn developer-friendly languages like CoffeeScript and SCSS into their browser-compliant counterparts.
 
-Webpack takes a unified approach to all of this. Like *Ruby*, *Git*, and *Linux*, it adheres to a universal abstraction: everything is a *module*. No matter what type of asset you&rsquo;re must bundle, you can require it directly into your front-end code as if it were a Javascript module.
+Webpack takes a unified approach. Like *Ruby*, *Git*, and *Linux*, it adheres to a universal abstraction: everything is a *module*. No matter what type of asset you&rsquo;re must bundle, you can require it directly into your front-end code as if it were a Javascript module.
 
 This allows Webpack to automate some of the complexity of this task, as we'll see later on in the article.
 
@@ -131,7 +135,7 @@ In short, you have a component, shown only after a user action, that is dependen
 
 In the past, you might solve this problem with dynamic loading techniques like passing callbacks, dynamically creating script tags, keeping track of state through booleans scattered throughout your code, and so on. You might end up with a sloppy state machine scattered across about 5 files that is still slow and vulnerable to race conditions.
 
-By virtue of its **universal abstraction** of modules, Webpack handles this part for you. All you have to do is specify which sections of code depend on which assets, using split points.
+By virtue of its universal abstraction, Webpack handles this part for you. All you have to do is specify which sections of code depend on which modules, using split points.
 
 Here’s one optimal solution to the problem above:
 
