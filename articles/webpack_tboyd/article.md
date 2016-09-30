@@ -91,7 +91,7 @@ This allows Webpack to automate some of the complexity of this task, as we'll se
 
 ## How to load assets in Webpack
 
-As of 2014, there were two main styles for importing Javascript modules: CommonJS and AMD. Webpack incorporates these two styles, as shown below:
+As of 2014, there were two main styles for importing Javascript modules: CommonJS and AMD. Webpack incorporates these two styles, as shown below. A new style, ES6's import syntax, became popular in 2015, which is planned for Webpack 2, but we'll leave that aside for now.
 
 ```javascript
 // CommonJS:
@@ -107,11 +107,11 @@ define([“icon.png”, “stylesheet.css”], function(icon, stylesheet) {
 });
 ```
 
-`define` and `require.ensure` are used by Webpack to draw its internal dependency tree for your system of asset files. This tree can be arbitrarily complex, and produces fruits called chunks.
+`define` and `require.ensure` are used by Webpack to draw its internal dependency tree for your system of asset files. This tree can be arbitrarily complex, and produces asset bundles ("chunks") according to a configurable set of rules.
 
-A chunk is a bundle of Javascript that contains a set of asset files. If you run Webpack with `--display-chunks`, you will see Webpack concatenate all of your assets into a single chunk by default. This is how most people have managed large Javascript projects in the past. But ever since mobile devices have taken over the internet, that behavior is no longer optimal. That’s where split points come in.
+If you run Webpack with `--display-chunks`, you will see Webpack concatenate all of your assets into a single chunk by default. This is how most people have managed large Javascript projects in the past. But ever since mobile devices have taken over the internet, that behavior is no longer optimal. That’s where split points come in.
 
-Your split points are the points in your code where Webpack encounters a define or require.ensure. These are places where Webpack knows it can separate a piece of code into separate chunks. The genius of Webpack is that split points don’t necessarily follow file boundaries, but are entirely up to the developer; one file can have a single split point at the top, or it can have several. The result is greater flexibility in loading your assets. You can have sections of your code block the rendering of the page, while other sections load concurrently in the background. Again, this is crucial in 2016 when you have to support a range of devices with unpredictable connectivity.
+Your split points are the points in your code where Webpack encounters a `define` or `require.ensure`. These are places where Webpack knows it can separate a piece of code into separate chunks. The genius of Webpack is that split points don’t necessarily follow file boundaries, but are entirely up to the developer; one file can have a single split point at the top, or it can have several. The result is greater flexibility in loading your assets. You can have sections of your code block the rendering of the page, while other sections load concurrently in the background. This is called progressive enhancement, a crucial technique now that you have to support a range of devices with unpredictable connectivity.
 
 If you were to try to do this manually using the full range of static and dynamic techniques for progressive enhancement, you would end up with a mess. Webpack automates this process and gives it a predictable structure, illustrated below:
 
@@ -123,55 +123,88 @@ When I first heard about Webpack processing SCSS into CSS, then transforming it 
 
 The answer is that Webpack assumes some complexities, like CSS preprocessors, CJS/AMD/ES6 module syntax, and asynchronous loading logic, for one simple reason: to automatically chunk interdependent assets together, no matter what they are. Once you understand this, you accept the complexity as a necessary evil in order to achieve this extremely ambitious goal.
 
-For example, say your site’s assets are arranged in this dependency graph:
+We used Webpack's *dynamic require* feature to solve a tricky problem during the migration from Google Maps to Mapbox. On most pages, we were hiding the map behind a user click to decouple the costly Google Maps setup code from the initial page load, and used a dynamic loading snippet provided by Google to manage this process.
+
+Mapbox does not provide a dynamic loading snippet, so writing that code became our responsibility. To make things even more complicated, Mapbox actually provides two separate libraries with different APIs, Mapbox.js and MapboxGL, depending whether the user agent supports WebGL.
+
+The challenge quickly became: how to preserve the dynamic loading of the map code, while adding an extra feature detection step to choose the library? Webpack to the rescue!
 
 ![Figure Three: Asset dependency graph](image3.png)
 
-In short, you have a component, shown only after a user action, that is dependent on one of two possible libraries chosen through feature detection. This highly synchronous process is made up of a chain of practically unpredictable events, which I’ve marked with dotted lines. You don’t know when the user is going to click the button, you don’t know when the JS and CSS libraries will finish loading, and you don’t know how long the setup code will take on the user’s device. The only thing you can really guarantee is the loading of the HTML and the feature detection code. But you want each of these processes to:
+Let's analyze the problem system by piece. In short, you have a component (the map), shown only after a user action (a click), that is dependent on one of two possible libraries chosen through feature detection (Mapbox.js or MapboxGL). This highly synchronous process is made up of a chain of practically unpredictable events, which I’ve marked with dotted lines. You don’t know when the user is going to click the button, you don’t know when the JS and CSS libraries will finish loading, and you don’t know how long the setup code will take on the user’s device. The only thing you can really guarantee is the loading of the HTML and the feature detection code. But you want each of these processes to:
 
 1. Be in the right order.
 2. Be as concurrent as possible.
 3. Happen only once.
 
-In the past, you might solve this problem with dynamic loading techniques like passing callbacks, dynamically creating script tags, keeping track of state through booleans scattered throughout your code, and so on. You might end up with a sloppy state machine scattered across about 5 files that is still slow and vulnerable to race conditions.
+In the past, you might solve this problem with dynamic loading techniques like passing callbacks, dynamically creating script tags, keeping track of state through booleans scattered throughout your code, and so on. You might end up with a sloppy state machine scattered across about 5 files that is still slow and vulnerable to race conditions. In fact, this describes our first pass.
 
-By virtue of its universal abstraction, Webpack handles this part for you. All you have to do is specify which sections of code depend on which modules, using split points.
+But by virtue of its universal abstraction, Webpack handles all this for you. All you have to do is specify which sections of code depend on which modules, using split points. 
 
-Here’s one optimal solution to the problem above:
+The code below is very similar to our real solution using Webpack:
 
 ```javascript
 define([
-    'jquery',
-    'feature-detect'
+    'mapbox-gl-supported'
  ], function(
-    $,
-    featureDetect
+    isMapboxGlSupported
  ) {
-    var clickedComponent;
 
-    if(featureDetect()) {
-        clickedComponent = function() {
-           require(['setup-component-1'], function(setupComponent) {
-               setupComponent();
-           });
-       };
-       require(['setup-component-1'], function(setupComponent) {});
+    // the function that will load the map code and initialize
+    // the map, or if the map code has been loaded, just
+    // initialize the map.
+    var loadAndInitMap;
+
+    // feature detection -- webGL detected.
+    if(isMapboxGlSupported()) {
+
+        // here is where we make the initialization dependent
+        // on the loading of MapboxGL.
+        loadAndInitMap = function() {
+            require(['mapbox-gl'], function(initMap) {
+                initMap();
+            });
+        };
+
+        // once feature detection is complete, go ahead and start
+        // loading the MapboxGL library in the background. The
+        // inner initMap function is not called because we are
+        // saving it for when the user clicks.
+        require(['mapbox-gl'], function(initMap) {});
+
+    // feature detection -- webGL not detected.
     } else {
-       clickedComponent = function() {
-           require(['setup-component-2'], function(setupComponent) {
-               setupComponent();
-           });
-       };
-       require(['setup-component-2'], function(setupComponent) {});
-   }
 
-   $("button.display-component").click(clickedComponent);
+        // here is where we make the initialization dependent
+        // on the loading of Mapbox.js.
+        loadAndInitMap = function() {
+            require(['mapbox.js'], function(initMap) {
+                initMap();
+            });
+        };
+
+        // once feature detection is complete, go ahead and start
+        // loading the Mapbox.js library in the background. The
+        // inner initMap function is not called because we are
+        // saving it for when the user clicks.
+        require(['mapbox.js'], function(initMap) {});
+    }
+
+    // the user click will initialize the map, but wait until the 
+    // correct library has been loaded.
+    $(".map-container").click(loadAndInitMap);
 });
 ```
 
 Looks like regular Javascript written in the AMD style, right? It is, but Webpack has repurposed `require()` to define a split point, or a break in the synchronous flow of the code where assets can be split into separate chunks.
 
-But this doesn’t mean you have to write in AMD or limited to libraries written in AMD. Webpack also supports CommonJS-style modules, as well as modules that interact with globally scoped objects like `window`. Webpack even supports modules that use AMD or CommonJS incorrectly. You can mix and match all of these types of libraries in one code base, while writing your app code the way you prefer.
+In the words of an age gone by, "Look at all the things I'm *NOT* doing!" I'm not...
+
+* keeping track of when libraries are loaded.
+* making sure libraries are not loaded more than once.
+* worrying about race conditions.
+
+Pretty cool, huh?
 
 ## Set your publicPath
 
@@ -179,7 +212,7 @@ There is one slight caveat with this technique, and that comes into play when yo
 
 When using Webpack’s dynamic require as shown above, Webpack will automatically insert the necessary code into your app bundle to fetch and evaluate the deferred sections of code. This means Webpack needs to know the URL from which to pull this code, or else it will attempt to pull it by default from the relative root path. [The way to specify this is via the publicPath.](https://github.com/webpack/docs/wiki/configuration#outputpublicpath)
 
-This only becomes a concern once you use a dynamic require, so not every Webpack configuration will have the publicPath specified. Whenever you use this technique, you should be sure to check to make sure the publicPath is properly set.
+This only becomes a concern once you use dynamic requires as shown above. Not every Webpack configuration will have the publicPath specified. Whenever you use this technique, you should be sure to check to make sure the publicPath is properly set.
 
 ## Conclusion
 
