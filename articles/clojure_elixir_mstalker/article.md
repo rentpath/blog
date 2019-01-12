@@ -1,4 +1,4 @@
-# Elixir vs Clojure: A High-Level Comparison
+# Elixir vs. Clojure: A High-Level Comparison
 
 I've spent a bit of time thinking through what language to invest more time in: Elixir or Clojure. They're very similar in many ways. Both support safe concurrency. Both are functional and favor immutability. Clojure and Elixir are both somewhat niche languages. If you're deciding to learn or use one over the other, here are some considerations. Other people have weighed in on this choice [here](https://elixirforum.com/t/opinions-on-elixir-vs-clojure/208), [here](https://www.reddit.com/r/Clojure/comments/5wxgko/elixir_or_clojure/), and [here](https://smashingboxes.com/blog/choosing-your-future-tech-stack-clojure-vs-elixir-vs-go/), but I wanted to offer my own observations.
 
@@ -21,7 +21,7 @@ rather than
 1 + 2
 ```
 
-This takes a bit of getting used to. However, once you do, it affords you some nice advantages. The structure of your code represenfts the abstract syntax tree (AST) very closely. Moreover, some editing tools like [ParEdit](https://www.emacswiki.org/emacs/ParEdit) or [Smartparens](https://github.com/Fuco1/smartparens) let you maniuplate your source code very quickly. Clojure also lets you pass a variable number of arguments functions like `+`:
+This takes a bit of getting used to. However, once you do, it affords you some nice advantages. The structure of your code represents the abstract syntax tree (AST) very closely. Moreover, some editing tools like [ParEdit](https://www.emacswiki.org/emacs/ParEdit) or [Smartparens](https://github.com/Fuco1/smartparens) let you manipulate your source code very quickly. Clojure also lets you pass a variable number of arguments functions like `+`:
 
 ```clojure
 (+ 1 2 3 4 5)
@@ -121,7 +121,7 @@ Both languages have some very good documentation and learning resources. Clojure
 
 
 ## Concurrency
-Elixir uses the [actor model](https://en.wikipedia.org/wiki/Actor_model) of concurrency. Processes communicate by [sending messages](https://hexdocs.pm/elixir/Process.html#send/3) to one another.
+Elixir's concurrency model involves various [processes communicating by sending messages to one another](https://elixir-lang.org/getting-started/processes.html).
 
 Clojure's concurrency works in the context of Java's thread system, and the language offers a few different ways to share state between threads. Read more [here](https://clojure.org/about/concurrent_programming).
 
