@@ -21,7 +21,7 @@ rather than
 1 + 2
 ```
 
-This takes a bit of getting used to. However, once you do, it affords you some nice advantages. The structure of your code represents the abstract syntax tree (AST) very closely. Moreover, some editing tools like [ParEdit](https://www.emacswiki.org/emacs/ParEdit) or [Smartparens](https://github.com/Fuco1/smartparens) let you manipulate your source code very quickly. Clojure also lets you pass a variable number of arguments functions like `+`:
+This takes a bit of getting used to. However, once you do, it affords you some nice advantages. The structure of your code represents the abstract syntax tree (AST) very closely. Moreover, some editing tools like [ParEdit](https://www.emacswiki.org/emacs/ParEdit) or [Smartparens](https://github.com/Fuco1/smartparens) let you manipulate your source code very quickly. Clojure also lets you pass a variable number of arguments to functions like `+`:
 
 ```clojure
 (+ 1 2 3 4 5)
@@ -74,7 +74,7 @@ def add(a, b) when is_list(a) and is_list(b), do: a ++ b
 def add(%{} = a, %{} = b), do: Map.merge(a, b)
 ```
 
-That first line uses a guard clause, which tells Elixir to execute it only if both arguments are lists. The second line matches the arguments against a map pattern.
+That first line uses a guard clause, which tells Elixir to execute this version of the function only if both arguments are lists. The second line matches the arguments against a map pattern.
 
 Like Clojure, Elixir exposes the AST. However, the connection between the shape of your code and the AST is not as obvious as it is in Clojure:
 
